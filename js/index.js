@@ -1,14 +1,38 @@
 import './std-js/shims.js';
 import {$} from './std-js/functions.js';
+import {randomInt as random, range} from './std-js/math.js';
 
-async function hasWon(board, player) {
-	return false;
+function rowWin(gameState, player) {
+	return gameState.some(row => [...row].every(cell => cell === player.value));
 }
 
-function resetBoard(board) {
-	const $cells = $('[data-player-move]', board);
-	$cells.data({playerMove: false});
-	$cells.each(cell => cell.textContent = ' ');
+function columnWin(gameState, player) {
+	return [0,1,2].some(col => {
+		return [0,1,2].every(row => {
+			return gameState[row][col] === player.value;
+		});
+	});
+}
+
+function diagonalWin(gameState, player) {
+	const diagonals = [
+		[gameState[0][0], gameState[1][1], gameState[2][2]],
+		[gameState[0][2], gameState[1][1], gameState[2][0]],
+	];
+	return diagonals.some(diagonal => diagonal.every(cell => cell === player.value));
+}
+
+function hasWon(board, player) {
+	const state = getState(board);
+	return rowWin(state, player) || columnWin(state, player) || diagonalWin(state, player);
+}
+
+function getState(board) {
+	return [...board.children].map(row => {
+		return [...row.children].map(cell => {
+			return cell.dataset.playerMove;
+		});
+	});
 }
 
 function drawBoard(board) {
@@ -16,6 +40,7 @@ function drawBoard(board) {
 	const players = turn();
 	let player = players.next();
 	let won = false;
+	[...board.children].forEach(child =>child.remove());
 
 	while (row++ < 3) {
 		let rowEl = document.createElement('div');
@@ -26,6 +51,8 @@ function drawBoard(board) {
 			let cell = document.createElement('span');
 			cell.classList.add('game-cell', 'inline-block');
 			cell.textContent = ' ';
+			cell.dataset.row = row;
+			cell.dataset.column = col;
 			cell.addEventListener('click', async event => {
 				event.preventDefault();
 				event.stopPropagation();
@@ -34,17 +61,15 @@ function drawBoard(board) {
 					cell.dataset.playerMove = player.value;
 					cell.textContent = player.value;
 
-					won = await hasWon(board, player);
-					console.info(won);
-					if (won) {
+					if (await hasWon(board, player)) {
 						alert(`${player.value} has won!`);
-						resetBoard(board);
+						drawBoard(board);
 					} else {
 						player = players.next();
 
 						if (player.done) {
 							alert('Draw!');
-							resetBoard(board);
+							drawBoard(board);
 						}
 					}
 				}
@@ -58,13 +83,19 @@ function drawBoard(board) {
 function* turn({player1 = 'X', player2 = 'O'} = {}) {
 	let counter = 0;
 	while (counter++ < 9) {
-		yield counter %2 == 0 ? player1 : player2;
+		yield counter % 2 === 0 ? player1 : player2;
 	}
 }
 
 $(self).ready(() => {
 	const $doc = $(document.documentElement);
 	const board = document.getElementById('game-board');
+
+	document.getElementById('reset-btn').addEventListener('click', () =>{
+		if (confirm('Are you sure you want to reset your game?')) {
+			drawBoard(board);
+		}
+	});
 
 	$doc.replaceClass('no-js', 'js');
 	drawBoard(board);
