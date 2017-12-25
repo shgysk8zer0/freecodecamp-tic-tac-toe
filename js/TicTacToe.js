@@ -5,6 +5,69 @@ function rowWin(gameState, player) {
 	return gameState.some(row => [...row].every(cell => cell === player.value));
 }
 
+function playerWins({player, board} = {}) {
+	alert(`${player.value} has won!`);
+	drawBoard(board);
+}
+
+function getAvailableCells(board) {
+	return [...board.querySelectorAll('[data-row][data-column]:not([data-player-move])')];
+}
+
+function isDraw(board) {
+	return getAvailableCells(board).length === 0;
+}
+
+function gameIsDraw(board) {
+	alert('Draw!');
+	drawBoard(board);
+}
+
+function aiMove({board, player} = {}) {
+	const cells = getAvailableCells(board);
+	if (cells.length !== 0) {
+		const cell = cells[random(0, cells.length - 1)];
+
+		takeMove({
+			board,
+			player,
+			row: cell.dataset.row,
+			column: cell.dataset.column,
+		});
+
+		return gameOver({player, board});
+	}
+}
+
+function gameOver({board, player} = {}) {
+	if (hasWon({board, player})) {
+		playerWins({board, player});
+		return true;
+	} else if (isDraw(board)) {
+		gameIsDraw(board);
+		return true;
+	} else {
+		return false;
+	}
+}
+
+function takeMove({
+	row,
+	column,
+	board,
+	player,
+} = {}) {
+	const cell = board.querySelector(`[data-row="${row}"][data-column="${column}"]`);
+
+	if (! cell.dataset.hasOwnProperty('playerMove')) {
+		cell.dataset.playerMove = player.value;
+		cell.textContent = player.value;
+		return true;
+	} else {
+		return false;
+	}
+}
+
 function columnWin(gameState, player) {
 	return [0,1,2].some(col => {
 		return [0,1,2].every(row => {
@@ -21,7 +84,7 @@ function diagonalWin(gameState, player) {
 	return diagonals.some(diagonal => diagonal.every(cell => cell === player.value));
 }
 
-function hasWon(board, player) {
+function hasWon({board, player} = {}) {
 	const state = getState(board);
 	return rowWin(state, player) || columnWin(state, player) || diagonalWin(state, player);
 }
@@ -57,20 +120,16 @@ export function drawBoard(board) {
 				event.preventDefault();
 				event.stopPropagation();
 
-				if (! cell.dataset.hasOwnProperty('playerMove')) {
-					cell.dataset.playerMove = player.value;
-					cell.textContent = player.value;
-
-					if (await hasWon(board, player)) {
-						alert(`${player.value} has won!`);
-						drawBoard(board);
-					} else {
+				if (takeMove({
+					player,
+					board,
+					row: cell.dataset.row,
+					column: cell.dataset.column,
+				})) {
+					if (! gameOver({board, player})) {
 						player = players.next();
-
-						if (player.done) {
-							alert('Draw!');
-							drawBoard(board);
-						}
+						aiMove({board, player});
+						player = players.next();
 					}
 				}
 			});
