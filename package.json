@@ -1,0 +1,60 @@
+{
+  "name": "freecodecamp-tic-tac-toe",
+  "version": "1.0.0",
+  "description": "Tic Tac Toe for FreeCodeCamp",
+  "main": "index.html",
+  "directories": {
+    "doc": "docs"
+  },
+  "scripts": {
+    "build": "npm run build:icons && npm run build:css && npm run build:js",
+    "build:css": "postcss css/index.css -o css/index.min.css",
+    "build:js": "rollup -c",
+    "build:icons": "svg-sprite-generate -c img/icons.csv -o img/icons.svg",
+    "lint": "npm run lint:all",
+    "lint:all": "npm run lint:js && npm run lint:css",
+    "lint:js": "eslint -c .eslintignore .",
+    "lint:css": "stylelint 'css/**/*.css'",
+    "watch:css": "postcss css/index.css -o css/index.min.css -w",
+    "watch:js": "rollup -c -w",
+    "git:fetch": "git fetch --all --prune --tags",
+    "git:submodules": "git submodule update --init --recursive",
+    "update-remote": "git submodule update --remote --init --recursive && npm update --save",
+    "update-packages": "npm run git:submodules && npm run git:fetch && npm run build",
+    "start": "python -m SimpleHTTPServer 8000",
+    "test": "npm run lint",
+    "postinstall": "npm run git:fetch && npm run git:submodules && npm run build"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/shgysk8zer0/freecodecamp-tic-tac-toe.git"
+  },
+  "author": "Chris Zuber",
+  "license": "GPL-3.0",
+  "bugs": {
+    "url": "https://github.com/shgysk8zer0/freecodecamp-tic-tac-toe/issues"
+  },
+  "homepage": "https://github.com/shgysk8zer0/freecodecamp-tic-tac-toe#readme",
+  "devDependencies": {
+    "eslint": "^4.14.0",
+    "eslint-plugin-async-await": "0.0.0",
+    "stylelint": "^8.4.0"
+  },
+  "dependencies": {
+    "cssnano": "^3.10.0",
+    "postcss": "^6.0.14",
+    "postcss-calc": "^6.0.1",
+    "postcss-cli": "^4.1.1",
+    "postcss-cssnext": "^3.0.2",
+    "postcss-custom-properties": "^6.2.0",
+    "postcss-import": "^11.0.0",
+    "postcss-load-config": "^1.2.0",
+    "postcss-plugin": "^1.0.0",
+    "postcss-url": "^7.3.0",
+    "rollup": "^0.53.0",
+    "rollup-plugin-uglify": "^2.0.1",
+    "stylelint-config-recommended": "^2.0.1",
+    "stylelint-config-standard": "^18.0.0",
+    "svg-sprite-generator": "0.0.7"
+  }
+}
