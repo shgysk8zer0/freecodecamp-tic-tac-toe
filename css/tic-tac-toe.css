@@ -1,0 +1,26 @@
+#game-board {
+	display: inline-block;
+	border: 1.3rem solid #F0B487;
+	border-radius: 0.8rem;
+	background-image: var(--board-background);
+	color: var(--chalk);
+	font-family: Roboto;
+	font-weight: bolder;
+	font-size: 3rem;
+	box-shadow: 0.8rem 0.8rem 0.6rem rgba(0,0,0,0.8);
+}
+
+.game-cell {
+	vertical-align: top;
+	text-align: center;
+	display: inline-block;
+	height: var(--cell-size);
+	width: var(--cell-size);
+	line-height: var(--cell-size);
+	border: 0.2rem solid var(--chalk);
+}
+
+.game-row {
+	display: block;
+	height: var(--cell-size);
+}

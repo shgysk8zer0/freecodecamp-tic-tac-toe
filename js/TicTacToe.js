@@ -1,12 +1,24 @@
-import {$} from './std-js/functions.js';
-import {randomInt as random, range} from './std-js/math.js';
+import {randomInt as random} from './std-js/math.js';
 
 function rowWin(gameState, player) {
 	return gameState.some(row => [...row].every(cell => cell === player.value));
 }
 
 function playerWins({player, board} = {}) {
-	alert(`${player.value} has won!`);
+	try {
+		const template = document.getElementById('game-over-template');
+		const tmp = template.content.cloneNode(true);
+		const dialog = tmp.querySelector('dialog');
+		dialog.id = 'game-over-dialog';
+		dialog.addEventListener('close', () => dialog.remove());
+		[...dialog.querySelectorAll('[data-close]')].forEach(btn => btn.dataset.close = `#${dialog.id}`);
+		dialog.querySelector('[data-field="player"]').textContent = `Player ${player.value}`;
+		console.log(document.body.appendChild(tmp));
+		dialog.showModal();
+	} catch(error) {
+		alert(`${player.value} won!`);
+		console.error(error);
+	}
 	drawBoard(board);
 }
 
@@ -102,13 +114,12 @@ export function drawBoard(board) {
 	const players = turn();
 	const rows = Array(3);
 	let player = players.next();
-	let won = false;
 	[...board.children].forEach(child =>child.remove());
 
 	while (row < 3) {
 		let rowEl = document.createElement('div');
 		let col = 0;
-		rowEl.classList.add('row');
+		rowEl.classList.add('game-row');
 
 		while (col++ < 3) {
 			let cell = document.createElement('span');

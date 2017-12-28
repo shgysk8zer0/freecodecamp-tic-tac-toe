@@ -5,11 +5,12 @@
 		<meta name="viewport" content="width=device-width" />
 		<title>Tic-Tac-Toe</title>
 		<script type="module" src="js/index.js" async=""></script>
+		<script type="application/javascript" src="js/index.min.js" async="" nomodule=""></script>
 		<link rel="stylesheet" href="css/index.css" media="screen" />
 	</head>
 	<body class="background-primary scroll-smooth border-box">
 		<div id="game-board"></div>
-		<button type="button" id="reset-btn" title="Reset">
+		<button type="button" id="reset-btn" title="Reset" class="fixed top right">
 			<svg class="current-color icon">
 				<use xlink:href="img/icons.svg#refresh" />
 			</svg>
@@ -26,5 +27,38 @@
 				</svg>
 			</a>
 		</footer>
+		<template id="game-over-template">
+			<dialog class="center">
+				<button data-close="" data-show-modal="#player-opts-dialog">
+					New game
+				</button>
+				<hr />
+				<b>Game over!</b>
+				<br />
+				<p class="status-text">
+					<span class="player-name" data-field="player"></span> won!
+				</p>
+			</dialog>
+		</template>
+		<dialog id="draw-dialog">
+			<button type="button" data-show="#player-opts-dialog" data-close="#draw-dialog">
+				<b class="big">It's a draw!</b>
+				<br />
+				<span>Play again</span>
+				<svg class="icon">
+					<use xlink:href="img/icons.svg#refresh" />
+				</svg>
+			</button>
+		</dialog>
+		<dialog id="player-opts-dialog">
+			<b>Select game type</b>
+			<br />
+			<button type="button" data-close="#player-opts-dialog" data-player-two="human">
+				vs. human
+			</button>
+			<button type="button" data-close="#player-opts-dialog" data-player-two="computer">
+				vs. computer
+			</button>
+		</dialog>
 	</body>
 </html>
