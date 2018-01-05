@@ -1,5 +1,6 @@
 import './std-js/shims.js';
-import {$} from './std-js/functions.js';
+import './std-js/deprefixer.js';
+import {$, ready} from './std-js/functions.js';
 import {drawBoard} from './TicTacToe.js';
 import * as shares from './share-config.js';
 import WebShareAPI from './std-js/webShareApi.js';
@@ -7,7 +8,7 @@ import * as Mutations from './std-js/mutations.js';
 
 WebShareAPI(...Object.values(shares));
 
-function readyHandler() {
+ready().then(() => {
 	const $doc = $(document.documentElement);
 	const board = document.getElementById('game-board');
 
@@ -20,7 +21,5 @@ function readyHandler() {
 	$doc.replaceClass('no-js', 'js');
 	drawBoard(board);
 	Mutations.init();
-	$doc.watch(Mutations.events, Mutations.options, Mutations.filters);
-}
-
-$(self).ready(readyHandler,{once: true});
+	$doc.watch(Mutations.events, Mutations.options, Mutations.filter);
+});

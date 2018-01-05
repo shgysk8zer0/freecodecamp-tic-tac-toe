@@ -11,8 +11,6 @@
     "build:css": "postcss css/index.css -o css/index.min.css",
     "build:js": "rollup -c",
     "build:icons": "svg-sprite-generate -c img/icons.csv -o img/icons.svg",
-    "lint": "npm run lint:all",
-    "lint:all": "npm run lint:js && npm run lint:css",
     "lint:js": "eslint -c .eslintignore .",
     "lint:css": "stylelint 'css/**/*.css'",
     "watch:css": "postcss css/index.css -o css/index.min.css -w",
@@ -22,8 +20,8 @@
     "update-remote": "git submodule update --remote --init --recursive && npm update --save",
     "update-packages": "npm run git:submodules && npm run git:fetch && npm run build",
     "start": "python -m SimpleHTTPServer 8000",
-    "test": "npm run lint",
-    "postinstall": "npm run git:fetch && npm run git:submodules && npm run build"
+    "test": "npm run lint:js && npm run lint:css",
+    "postinstall": "npm run git:submodules && npm run build"
   },
   "repository": {
     "type": "git",

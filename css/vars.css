@@ -1,12 +1,7 @@
 :root {
-	--backdrop-background: rgba(0,0,0,0.7);
 	--primary-color: #fefefe;
 	--cell-size: calc(80vmin / 3);
 	--button-background: linear-gradient(gainsboro, whitesmoke);
 	--chalk: #EAEAEA;
 	--board-background: radial-gradient(#007400, #1D5413);
-}
-
-::backdrop {
-	--backdrop-background: rgba(0,0,0,0.7);
 }
