@@ -34,15 +34,15 @@
   },
   "homepage": "https://github.com/shgysk8zer0/freecodecamp-tic-tac-toe#readme",
   "devDependencies": {
-    "eslint": "^4.14.0",
+    "eslint": "^8.43.0",
     "eslint-plugin-async-await": "0.0.0",
-    "stylelint": "^8.4.0"
+    "stylelint": "^15.8.0"
   },
   "dependencies": {
     "cssnano": "^3.10.0",
     "postcss": "^6.0.14",
     "postcss-calc": "^6.0.1",
-    "postcss-cli": "^4.1.1",
+    "postcss-cli": "^10.1.0",
     "postcss-cssnext": "^3.0.2",
     "postcss-custom-properties": "^6.2.0",
     "postcss-import": "^11.0.0",
